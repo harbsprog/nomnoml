@@ -2,8 +2,8 @@ var nomnoml = nomnoml || {};
 
 (function () {
 	'use strict';
-
-	function getConfig(d) {
+	debugger;
+	function getConfig(d) {		
 		var userStyles = {}
 		_.each(d, function (styleDef, key){
 			if (key[0] != '.') return
