@@ -1219,8 +1219,8 @@ nomnoml.render = function (graphics, config, compartment, setFont){
 	}
 
 	_.extend(styles, config.styles)
-
-	var visualizers = {
+debugger;
+	var visualizers = {		
 		actor : function (node, x, y, padding, config, g) {
 			var a = padding/2
 			var yp = y + a/2
@@ -1556,11 +1556,11 @@ var nomnoml = nomnoml || {};
 		canvas.height = rect.height * zoom;
 	}
 
-	function setFont(config, isBold, isItalic, graphics) {
+	function setFont(config, isBold, isItalic, graphics, fontSize) {		
 		var style = (isBold === 'bold' ? 'bold' : '')
 		if (isItalic) style = 'italic ' + style
 		var defaultFont = 'Helvetica, sans-serif'
-		var font = skanaar.format('# #pt #, #', style, config.fontSize, config.font, defaultFont)
+		var font = skanaar.format('# #pt #, #', style, (fontSize || config.fontSize), config.font, defaultFont)
 		graphics.font(font)
 	}
 
@@ -1568,7 +1568,7 @@ var nomnoml = nomnoml || {};
 		var ast = nomnoml.parse(code);
 		var config = getConfig(ast.directives);
 		var measurer = {
-			setFont: function (a, b, c) { setFont(a, b, c, graphics); },
+			setFont: function (a, b, c, d) { setFont(a, b, c, graphics, d); },
 			textWidth: function (s) { return graphics.measureText(s).width },
 			textHeight: function () { return config.leading * config.fontSize }
 		};

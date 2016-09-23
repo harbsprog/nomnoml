@@ -169,6 +169,7 @@ nomnoml.render = function (graphics, config, compartment, setFont){
 	}
 
 	function renderNode(node, level){
+		debugger;
 		var x = Math.round(node.x-node.width/2)
 		var y = Math.round(node.y-node.height/2)
 		var style = styles[node.type] || styles.CLASS
@@ -187,8 +188,8 @@ nomnoml.render = function (graphics, config, compartment, setFont){
 			var s = i > 0 ? {} : style; // only style node title
 			if (s.empty) return
 			g.save()
-			g.translate(x, yDivider)
-			setFont(config, s.bold ? 'bold' : 'normal', s.italic)
+			g.translate(x, yDivider)			
+			setFont(config, s.bold ? 'bold' : 'normal', s.italic, style.fontSize)
 			renderCompartment(part, s, level+1)
 			g.restore()
 			if (i+1 === node.compartments.length) return

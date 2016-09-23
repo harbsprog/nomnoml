@@ -16,6 +16,7 @@ nomnoml.Compartment = function (lines, nodes, relations){
 }
 
 nomnoml.layout = function (measurer, config, ast){
+	debugger;
 	function runDagre(input){
 		return dagre.layout()
 					.rankSep(config.spacing)
@@ -33,7 +34,8 @@ nomnoml.layout = function (measurer, config, ast){
 			height: Math.round(measurer.textHeight() * lines.length + 2*config.padding)
 		}
 	}
-	function layoutCompartment(c, compartmentIndex){
+	function layoutCompartment(c, compartmentIndex){	
+		debugger;	
 		var textSize = measureLines(c.lines, compartmentIndex ? 'normal' : 'bold')
 		c.width = textSize.width
 		c.height = textSize.height
