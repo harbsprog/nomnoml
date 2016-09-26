@@ -50,15 +50,16 @@ var nomnoml = nomnoml || {};
 		var style = (isBold === 'bold' ? 'bold' : '')
 		if (isItalic) style = 'italic ' + style
 		var defaultFont = 'Helvetica, sans-serif'
-		debugger;
+		
 		var font = skanaar.format('# #pt #, #', style, (fontSize || config.fontSize), config.font, defaultFont)
 		graphics.font(font)
 	}
 
 	function parseAndRender(code, graphics, canvas, scale) {
+		
 		var ast = nomnoml.parse(code);
 		var config = getConfig(ast.directives);
-		debugger;
+		
 		var measurer = {
 			setFont: function (a, b, c, d) { setFont(a, b, c, graphics, d); },
 			textWidth: function (s) { return graphics.measureText(s).width },
@@ -72,15 +73,17 @@ var nomnoml = nomnoml || {};
 	}
 
 	nomnoml.draw = function (canvas, code, scale) {
+		
 		return parseAndRender(code, skanaar.Canvas(canvas), canvas, scale || 1)
 	};
 
 	nomnoml.renderSvg = function (code) {
+		
 		var ast = nomnoml.parse(code)
 		var config = getConfig(ast.directives)
 		var skCanvas = skanaar.Svg('')
 		function setFont(config, isBold, isItalic, fontSize) {
-			debugger;
+			
 			var style = (isBold === 'bold' ? 'bold' : '')
 			if (isItalic) style = 'italic ' + style
 			var defFont = 'Helvetica, sans-serif'
@@ -89,7 +92,7 @@ var nomnoml = nomnoml || {};
 			skCanvas.font(font)
 		}
 		var test = config.leading * (fontSize || config.fontSize);
-		debugger;
+		
 		var measurer = {
 			setFont: function (a, b, c, d) { setFont(a, b, c, skCanvas, d); },
 			textWidth: function (s) { return skCanvas.measureText(s).width },

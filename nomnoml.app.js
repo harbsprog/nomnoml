@@ -11,6 +11,7 @@ $(function (){
 	var storageStatusElement = $('#storage-status')
 	var textarea = document.getElementById('textarea')
 	var imgLink = document.getElementById('savebutton')
+	var uploadLink = document.getElementById('uploadbutton')
 	var linkLink = document.getElementById('linkbutton')
 	var canvasElement = document.getElementById('canvas')
 	var canvasPanner = document.getElementById('canvas-panner')
@@ -21,7 +22,7 @@ $(function (){
 	var mouseDownPoint = false
 	var vm = skanaar.vector
 
-	var editor = CodeMirror.fromTextArea(textarea, {
+	var editor = CodeMirror.fromTextArea(textarea, {		
 		lineNumbers: true,
 		mode: 'nomnoml',
 		matchBrackets: true,
@@ -44,6 +45,23 @@ $(function (){
 	canvasPanner.addEventListener('mouseleave', mouseUp)
 	canvasPanner.addEventListener('wheel', _.throttle(magnify, 50))
 	initImageDownloadLink(imgLink, canvasElement)
+	uploadLink.onclick = function(){			 
+		var model = new FormData();
+		model.append("value", "value");
+		model.append("vasya", "alesha");
+    $.ajax({		
+        type: "POST",
+        data : model,
+        url: "http://localhost:63808/api/values",	
+		cache: false,
+
+            contentType: false,
+
+            processData: false
+							
+    });
+		
+	}
 	initToolbarTooltips()
 
 	reloadStorage()
@@ -202,7 +220,6 @@ $(function (){
 			lineNumbers.toggleClass('error', false)
 			var superSampling = window.devicePixelRatio || 1
 			var scale = superSampling * Math.exp(zoomLevel/10)
-
 			var model = nomnoml.draw(canvasElement, currentText(), scale)
 			positionCanvas(canvasElement, superSampling, offset)
 			setFilename(model.config.title)

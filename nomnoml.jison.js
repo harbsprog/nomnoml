@@ -130,6 +130,7 @@ parseError: function parseError(str, hash) {
     }
 },
 parse: function parse(input) {
+    
     var self = this, stack = [0], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
     var args = lstack.slice.call(arguments, 1);
     this.lexer.setInput(input);
@@ -628,6 +629,7 @@ exports.main = function commonjsMain(args) {
         process.exit(1);
     }
     var source = require('fs').readFileSync(require('path').normalize(args[1]), "utf8");
+    
     return exports.parser.parse(source);
 };
 if (typeof module !== 'undefined' && require.main === module) {

@@ -7,8 +7,9 @@
   "license": "MIT",
   "keywords": [
     "uml"
-  ],
+  ],  
   "main": "dist/nomnoml.js",
+  
   "files": ["dist/nomnoml.js", "dist/nomnoml-cli.js"],
   "dependencies": {
     "lodash": "~3.7.0",

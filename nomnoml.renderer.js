@@ -169,7 +169,7 @@ nomnoml.render = function (graphics, config, compartment, setFont){
 	}
 
 	function renderNode(node, level){
-		debugger;
+		
 		var x = Math.round(node.x-node.width/2)
 		var y = Math.round(node.y-node.height/2)
 		var style = styles[node.type] || styles.CLASS
