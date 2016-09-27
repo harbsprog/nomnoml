@@ -13,6 +13,7 @@ $(function (){
 	var imgLink = document.getElementById('savebutton')
 	var uploadLink = document.getElementById('uploadbutton')
 	var linkLink = document.getElementById('linkbutton')
+	var loadLink = document.getElementById('loadLink')
 	var canvasElement = document.getElementById('canvas')
 	var canvasPanner = document.getElementById('canvas-panner')
 	var canvasTools = document.getElementById('canvas-tools')
@@ -45,24 +46,8 @@ $(function (){
 	canvasPanner.addEventListener('mouseleave', mouseUp)
 	canvasPanner.addEventListener('wheel', _.throttle(magnify, 50))
 	initImageDownloadLink(imgLink, canvasElement)
-	uploadLink.onclick = function(){
-    $.ajax({
-        type: "POST",
-        data : {
-			value: editor.getValue(),
-		    name: "test"
-		},
-        url: "http://localhost:49980/api/values"        
-    }); 
-		$.ajax({
-        type: "POST",
-        data : {
-			value: "value",
-		    name: "test"
-		},
-        url: "http://localhost:5000/api/values"        
-    }); 
-	}
+	saveImageSource(uploadLink, editor.getValue())
+	showStoredConvases(loadLink)
 	initToolbarTooltips()
 
 	reloadStorage()
@@ -173,6 +158,55 @@ $(function (){
 		function downloadImage(){
 			var url = canvasElement.toDataURL('image/png')
 			link.href = url;
+		}
+	}
+
+	function saveImageSource(link){
+		link.addEventListener('click', upload, false);
+		function upload(){
+      		var value = editor.getValue();
+
+			$.ajax({
+				type: "POST",
+				data : {
+					value: value,
+					name: "test"
+				},
+				url: "http://localhost:49980/api/values"        
+			}); 
+		    $.ajax({
+				type: "POST",
+				data : {
+					value: value,
+					name: "test"
+				},
+				url: "http://localhost:5000/api/values"        
+    		});
+		}
+	}
+
+	function showStoredConvases (link)
+	{
+		link.addEventListener('click', upload, false);
+		function upload(){
+      		var value = editor.getValue();
+
+			$.ajax({
+				type: "POST",
+				data : {
+					value: value,
+					name: "test"
+				},
+				url: "http://localhost:49980/api/values"        
+			}); 
+		    $.ajax({
+				type: "POST",
+				data : {
+					value: value,
+					name: "test"
+				},
+				url: "http://localhost:5000/api/values"        
+    		});
 		}
 	}
 

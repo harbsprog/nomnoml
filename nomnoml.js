@@ -91,7 +91,6 @@ var nomnoml = nomnoml || {};
 			var font = skanaar.format(template, style, (fontSize || config.fontSize), config.font, defFont)
 			skCanvas.font(font)
 		}
-		var test = config.leading * (fontSize || config.fontSize);
 		
 		var measurer = {
 			setFont: function (a, b, c, d) { setFont(a, b, c, skCanvas, d); },
