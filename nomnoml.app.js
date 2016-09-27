@@ -45,21 +45,15 @@ $(function (){
 	canvasPanner.addEventListener('mouseleave', mouseUp)
 	canvasPanner.addEventListener('wheel', _.throttle(magnify, 50))
 	initImageDownloadLink(imgLink, canvasElement)
-	uploadLink.onclick = function(){			 
-		var model = new FormData();
-		model.append("value", "value");
-		model.append("vasya", "alesha");
-    $.ajax({		
+	uploadLink.onclick = function(){
+    $.ajax({
         type: "POST",
-        data : model,
-        url: "http://localhost:63808/api/values",	
-		cache: false,
-
-            contentType: false,
-
-            processData: false
-							
-    });
+        data : {
+			value: "value",
+		    name: "test"
+		},
+        url: "http://localhost:49980/api/values"        
+    }); 
 		
 	}
 	initToolbarTooltips()
