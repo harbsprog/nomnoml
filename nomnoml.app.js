@@ -47,7 +47,7 @@ $(function (){
 	canvasPanner.addEventListener('wheel', _.throttle(magnify, 50))
 	initImageDownloadLink(imgLink, canvasElement)
 	saveImageSource(uploadLink, editor.getValue())
-	showStoredConvases(loadLink)
+	showStoredConvas(loadLink)
 	initToolbarTooltips()
 
 	reloadStorage()
@@ -185,7 +185,7 @@ $(function (){
 		}
 	}
 
-	function showStoredConvases (link)
+	function showStoredConvas (link)
 	{
 		link.addEventListener('click', upload, false);
 		function upload(){
