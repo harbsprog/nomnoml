@@ -49,12 +49,19 @@ $(function (){
     $.ajax({
         type: "POST",
         data : {
-			value: "value",
+			value: editor.getValue(),
 		    name: "test"
 		},
         url: "http://localhost:49980/api/values"        
     }); 
-		
+		$.ajax({
+        type: "POST",
+        data : {
+			value: "value",
+		    name: "test"
+		},
+        url: "http://localhost:5000/api/values"        
+    }); 
 	}
 	initToolbarTooltips()
 
