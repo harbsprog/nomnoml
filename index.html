@@ -223,11 +223,22 @@
 			<div class="logo-background"></div>
 		</div>
 
+		<div id="list" class="sidebar">
+			<div class="content">
+				<div id="exists">
+
+				</div>
+			</div>
+		</div>
+
 		<div id="linemarker"></div>
 
 		<div class="tools">
 			<a class="logo" href="javascript:void(0)" onclick="nomnoml.toggleSidebar('about')" title="About nomnoml"><h1>nomnoml</h1> &nbsp;</a>
 			<a href="javascript:void(0)" onclick="nomnoml.toggleSidebar('about')" title="About nomnoml">
+				<img src="img/info-large.png">
+			</a>
+			<a href="javascript:void(0)" onclick="nomnoml.toggleSidebar('list')" title="List canvases">
 				<img src="img/info-large.png">
 			</a>
 			<a href="javascript:void(0)" onclick="nomnoml.toggleSidebar('reference')" title="Language reference">
@@ -266,10 +277,7 @@
 				</a>
 			</div>
 		</div>
-	</div>
-	<div id="exists">
-		
-	</div>
+	</div>	
 	<script type="text/vnd.nomnoml.class" id="defaultGraph">[Pirate|eyeCount: Int|raid();pillage()|
   [beard]--[parrot]
   [beard]-:>[foul mouth]
