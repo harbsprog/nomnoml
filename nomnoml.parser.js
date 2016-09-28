@@ -35,7 +35,7 @@ nomnoml.transformParseIntoSyntaxTree = function (entity){
 
 	var relationId = 0
 
-	function transformCompartment(parts){
+	function transformCompartment(parts){	
 		var lines = []
 		var rawClassifiers = []
 		var relations = []

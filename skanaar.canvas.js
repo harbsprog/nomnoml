@@ -79,13 +79,13 @@ skanaar.Canvas = function (canvas, callbacks){
 				ctx.arc(x, y, r, 0, twopi)
 			return chainable
 		},
-		ellipse: function (center, rx, ry, start, stop){
+		ellipse: function (center, rx, ry, start, stop){						
 			if (start === undefined) start = 0
 			if (stop === undefined) stop = twopi
 			ctx.beginPath()
 			ctx.save()
 			ctx.translate(center.x, center.y)
-			ctx.scale(1, ry/rx)
+			ctx.scale(1.2, ry/rx + 0.1)
 			ctx.arc(0, 0, rx/2, start, stop)
 			ctx.restore()
 			return chainable

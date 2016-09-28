@@ -87,6 +87,7 @@ skanaar.Canvas = function (canvas, callbacks){
 			return chainable
 		},
 		ellipse: function (center, rx, ry, start, stop){
+			debugger;
 			if (start === undefined) start = 0
 			if (stop === undefined) stop = twopi
 			ctx.beginPath()
@@ -286,11 +287,11 @@ skanaar.Svg = function (globalStyle){
 			elements.push(element)
 			return element
 		},
-		ellipse: function (center, w, h /*, start, stop*/){
+		ellipse: function (center, w, h /*, start, stop*/){			
 			return newElement('ellipse',
 				{ cx: tX(center.x), cy: tY(center.y), rx: w/2, ry: h/2 })
 		},
-		arc: function (x, y, r /*, start, stop*/){
+		arc: function (x, y, r /*, start, stop*/){			
 			return newElement('ellipse',
 				{ cx: tX(x), cy: tY(y), rx: r, ry: r })
 		},
@@ -1244,7 +1245,7 @@ nomnoml.render = function (graphics, config, compartment, setFont){
 			g.path([{x: x, y: cy}, {x: x, y: cy+node.height}]).stroke()
 			g.path([
 				{x: x+node.width, y: cy},
-				{x: x+node.width, y: cy+node.height}]).stroke()
+				{x: x+node.width, y: cy+node.height}]).stroke()				
 			g.ellipse({x: node.x, y: cy}, node.width, padding*1.5).fillAndStroke()
 			g.ellipse({x: node.x, y: cy+node.height}, node.width, padding*1.5, 0, pi)
 			.fillAndStroke()
@@ -1354,11 +1355,12 @@ nomnoml.render = function (graphics, config, compartment, setFont){
 		})
 		g.translate(config.gutter, config.gutter)
 		_.each(compartment.relations, function (r){ renderRelation(r, compartment) })
+		debugger;
 		_.each(compartment.nodes, function (n){ renderNode(n, level) })
 		g.restore()
 	}
 
-	function renderNode(node, level){
+	function renderNode(node, level){		
 		var x = Math.round(node.x-node.width/2)
 		var y = Math.round(node.y-node.height/2)
 		var style = styles[node.type] || styles.CLASS
