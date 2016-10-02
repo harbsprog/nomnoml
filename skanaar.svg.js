@@ -5,6 +5,7 @@ skanaar.Svg = function (globalStyle){
 	var elements = []
 
 	function Element(name, attr, content) {
+		debugger;
 		attr.style = attr.style || ''
 		return {
 			name: name,
@@ -72,11 +73,13 @@ skanaar.Svg = function (globalStyle){
 			elements.push(element)
 			return element
 		},
-		ellipse: function (center, w, h /*, start, stop*/){
+		ellipse: function (center, w, h /*, start, stop*/){	
+			debugger;		
 			return newElement('ellipse',
 				{ cx: tX(center.x), cy: tY(center.y), rx: w/2, ry: h/2 })
 		},
 		arc: function (x, y, r /*, start, stop*/){
+			
 			return newElement('ellipse',
 				{ cx: tX(x), cy: tY(y), rx: r, ry: r })
 		},

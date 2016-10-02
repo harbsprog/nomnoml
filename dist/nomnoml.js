@@ -87,6 +87,7 @@ skanaar.Canvas = function (canvas, callbacks){
 			return chainable
 		},
 		ellipse: function (center, rx, ry, start, stop){
+			debugger;
 			if (start === undefined) start = 0
 			if (stop === undefined) stop = twopi
 			ctx.beginPath()
@@ -286,11 +287,11 @@ skanaar.Svg = function (globalStyle){
 			elements.push(element)
 			return element
 		},
-		ellipse: function (center, w, h /*, start, stop*/){
+		ellipse: function (center, w, h /*, start, stop*/){			
 			return newElement('ellipse',
 				{ cx: tX(center.x), cy: tY(center.y), rx: w/2, ry: h/2 })
 		},
-		arc: function (x, y, r /*, start, stop*/){
+		arc: function (x, y, r /*, start, stop*/){			
 			return newElement('ellipse',
 				{ cx: tX(x), cy: tY(y), rx: r, ry: r })
 		},
@@ -1012,6 +1013,7 @@ exports.main = function commonjsMain(args) {
         process.exit(1);
     }
     var source = require('fs').readFileSync(require('path').normalize(args[1]), "utf8");
+	
     return exports.parser.parse(source);
 };
 if (typeof module !== 'undefined' && require.main === module) {
@@ -1019,8 +1021,8 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 };
 var nomnoml = nomnoml || {}
-
 nomnoml.parse = function (source){
+	
 	function onlyCompilables(line){
 		var ok = line[0] !== '#' && line.substring(0,2) !== '//'
 		return ok ? line : ''
@@ -1040,6 +1042,7 @@ nomnoml.parse = function (source){
 		}
 	}))
 	var pureDiagramCode = _.map(_.pluck(lines, 'text'), onlyCompilables).join('\n').trim()
+	
 	var ast = nomnoml.transformParseIntoSyntaxTree(nomnoml.intermediateParse(pureDiagramCode))
 	ast.directives = directives
 	return ast
@@ -1222,7 +1225,11 @@ nomnoml.render = function (graphics, config, compartment, setFont){
 
 	_.extend(styles, config.styles)
 
+<<<<<<< HEAD
 	var visualizers = {
+=======
+	var visualizers = {		
+>>>>>>> 6e3a47b7b8b7019b77f7985a491d6ce4f8937426
 		actor : function (node, x, y, padding, config, g) {
 			var a = padding/2
 			var yp = y + a/2
@@ -1244,7 +1251,7 @@ nomnoml.render = function (graphics, config, compartment, setFont){
 			g.path([{x: x, y: cy}, {x: x, y: cy+node.height}]).stroke()
 			g.path([
 				{x: x+node.width, y: cy},
-				{x: x+node.width, y: cy+node.height}]).stroke()
+				{x: x+node.width, y: cy+node.height}]).stroke()				
 			g.ellipse({x: node.x, y: cy}, node.width, padding*1.5).fillAndStroke()
 			g.ellipse({x: node.x, y: cy+node.height}, node.width, padding*1.5, 0, pi)
 			.fillAndStroke()
@@ -1354,12 +1361,17 @@ nomnoml.render = function (graphics, config, compartment, setFont){
 		})
 		g.translate(config.gutter, config.gutter)
 		_.each(compartment.relations, function (r){ renderRelation(r, compartment) })
+		debugger;
 		_.each(compartment.nodes, function (n){ renderNode(n, level) })
 		g.restore()
 	}
 
+<<<<<<< HEAD
 	function renderNode(node, level){
 		debugger;
+=======
+	function renderNode(node, level){		
+>>>>>>> 6e3a47b7b8b7019b77f7985a491d6ce4f8937426
 		var x = Math.round(node.x-node.width/2)
 		var y = Math.round(node.y-node.height/2)
 		var style = styles[node.type] || styles.CLASS
@@ -1570,6 +1582,7 @@ var nomnoml = nomnoml || {};
 	}
 
 	function parseAndRender(code, graphics, canvas, scale) {
+		
 		var ast = nomnoml.parse(code);
 		var config = getConfig(ast.directives);
 		debugger;
@@ -1586,10 +1599,12 @@ var nomnoml = nomnoml || {};
 	}
 
 	nomnoml.draw = function (canvas, code, scale) {
+		
 		return parseAndRender(code, skanaar.Canvas(canvas), canvas, scale || 1)
 	};
 
 	nomnoml.renderSvg = function (code) {
+		
 		var ast = nomnoml.parse(code)
 		var config = getConfig(ast.directives)
 		var skCanvas = skanaar.Svg('')

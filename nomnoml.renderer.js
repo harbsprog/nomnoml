@@ -47,19 +47,21 @@ nomnoml.render = function (graphics, config, compartment, setFont){
 		class : function (node, x, y, padding, config, g) {
 			g.rect(x, y, node.width, node.height).fillAndStroke()
 		},
-		database : function (node, x, y, padding, config, g) {
+		database : function (node, x, y, padding, config, g) {				
 			var cy = y-padding/2
 			var pi = 3.1416
+			
 			g.rect(x, y, node.width, node.height).fill()
 			g.path([{x: x, y: cy}, {x: x, y: cy+node.height}]).stroke()
 			g.path([
 				{x: x+node.width, y: cy},
-				{x: x+node.width, y: cy+node.height}]).stroke()
+				{x: x+node.width, y: cy+node.height}]).stroke()		
+				
 			g.ellipse({x: node.x, y: cy}, node.width, padding*1.5).fillAndStroke()
 			g.ellipse({x: node.x, y: cy+node.height}, node.width, padding*1.5, 0, pi)
 			.fillAndStroke()
 		},
-		ellipse : function (node, x, y, padding, config, g) {
+		ellipse : function (node, x, y, padding, config, g) {			
 			g.ellipse({x: node.x, y: node.y}, node.width, node.height).fillAndStroke()
 		},
 		end : function (node, x, y, padding, config, g) {
@@ -164,16 +166,16 @@ nomnoml.render = function (graphics, config, compartment, setFont){
 		})
 		g.translate(config.gutter, config.gutter)
 		_.each(compartment.relations, function (r){ renderRelation(r, compartment) })
+		debugger;
 		_.each(compartment.nodes, function (n){ renderNode(n, level) })
 		g.restore()
 	}
 
-	function renderNode(node, level){
-		debugger;
+	function renderNode(node, level){	
+		debugger;	
 		var x = Math.round(node.x-node.width/2)
 		var y = Math.round(node.y-node.height/2)
 		var style = styles[node.type] || styles.CLASS
-
 		g.fillStyle(style.fill || config.fill[level] || _.last(config.fill))
 		if (style.dashed){
 			var dash = Math.max(4, 2*config.lineWidth)
@@ -190,20 +192,24 @@ nomnoml.render = function (graphics, config, compartment, setFont){
 			g.save()
 			g.translate(x, yDivider)			
 			setFont(config, s.bold ? 'bold' : 'normal', s.italic, style.fontSize)
+			debugger;
 			renderCompartment(part, s, level+1)
 			g.restore()
 			if (i+1 === node.compartments.length) return
 			yDivider += part.height
 			if (style.visual === 'frame' && i === 0){
-				var w = g.measureText(node.name).width+part.height/2+padding
+				
+				var w = g.measureText(node.name).width+part.height/2+padding				
 				g.path([
 					{x:x, y:yDivider},
 					{x:x+w-part.height/2, y:yDivider},
 					{x:x+w, y:yDivider-part.height/2},
 					{x:x+w, y:yDivider-part.height}
 					]).stroke()
-			} else
+			} else{
+			
 				g.path([{x:x, y:yDivider}, {x:x+node.width, y:yDivider}]).stroke()
+				}
 		})
 	}
 

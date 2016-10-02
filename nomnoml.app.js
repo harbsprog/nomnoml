@@ -11,17 +11,20 @@ $(function (){
 	var storageStatusElement = $('#storage-status')
 	var textarea = document.getElementById('textarea')
 	var imgLink = document.getElementById('savebutton')
+	var uploadLink = document.getElementById('uploadbutton')
 	var linkLink = document.getElementById('linkbutton')
+	var loadLink = document.getElementById('loadLink')
 	var canvasElement = document.getElementById('canvas')
 	var canvasPanner = document.getElementById('canvas-panner')
 	var canvasTools = document.getElementById('canvas-tools')
+	var existsCanvList = document.getElementById('exists')
 	var defaultSource = document.getElementById('defaultGraph').innerHTML
 	var zoomLevel = 0
 	var offset = {x:0, y:0}
 	var mouseDownPoint = false
 	var vm = skanaar.vector
 
-	var editor = CodeMirror.fromTextArea(textarea, {
+	var editor = CodeMirror.fromTextArea(textarea, {		
 		lineNumbers: true,
 		mode: 'nomnoml',
 		matchBrackets: true,
@@ -44,8 +47,55 @@ $(function (){
 	canvasPanner.addEventListener('mouseleave', mouseUp)
 	canvasPanner.addEventListener('wheel', _.throttle(magnify, 50))
 	initImageDownloadLink(imgLink, canvasElement)
-	initToolbarTooltips()
+	saveImageSource(uploadLink, editor.getValue())
 
+	// showStoredConvas(loadLink)
+	initToolbarTooltips()
+	$.ajax({
+				type: "GET",				
+				url: "http://localhost:49980/api/values",
+				success: function(data) {
+					var cc = document.createElement('div');					
+					data.forEach(function(canv){						
+						var c = document.createElement('div');
+						var pre = document.createElement('pre');
+						var rem = document.createElement('button');
+						var hr = document.createElement('hr');
+						pre.style.cursor = 'pointer';
+						pre.innerText = canv.value;
+						pre.onclick = function(){							
+							editor.setValue(canv.value);
+							if (this.style.background != 'aliceblue')
+								this.style.background = 'aliceblue';
+							else
+								this.style.background = '#fdf6e3';
+						};
+						rem.textContent = 'x';
+						rem.onclick = function(){
+							if (confirm("are u shur"))
+							{
+								$.ajax({
+									type: "DELETE",				
+									url: "http://localhost:49980/api/values/" + canv._id.$oid,								
+									success: function(data) {
+										cc.removeChild(c);
+										cc.removeChild(pre);										 
+										alert('success');
+								 }});
+						    };
+						};
+						c.appendChild(pre);
+						c.appendChild(rem);
+						cc.appendChild(c);
+						cc.appendChild(pre); 
+					});
+						
+					existsCanvList.appendChild(cc);				
+				},
+				error: function(data){
+					
+				}        
+			})
 	reloadStorage()
 
 	function classToggler(element, className, state){
@@ -87,7 +137,7 @@ $(function (){
 	}
 
 	nomnoml.toggleSidebar = function (id){
-		var sidebars = ['reference', 'about']
+		var sidebars = ['reference', 'about', 'list']
 		_.each(sidebars, function (key){
 			if (id !== key) $(document.getElementById(key)).toggleClass('visible', false)
 		})
@@ -157,6 +207,57 @@ $(function (){
 		}
 	}
 
+	function saveImageSource(link){
+		link.addEventListener('click', upload, false);
+		function upload(){
+      		var value = editor.getValue();
+
+			$.ajax({
+				type: "POST",
+				data : {
+					value: value,
+					name: "test"
+				},
+				url: "http://localhost:49980/api/values",
+				success: function(){ alert('success');}        
+			}); 
+		    $.ajax({
+				type: "POST",
+				data : {
+					value: value,
+					name: "test"
+				},
+				url: "http://localhost:5000/api/values",
+				success: function(){ alert('success');}          
+    		});
+		}
+	}
+
+	// function showStoredConvas (link)
+	// {
+	// 	link.addEventListener('click', upload, false);
+	// 	function upload(){
+    //   		var value = editor.getValue();
+
+	// 		$.ajax({
+	// 			type: "POST",
+	// 			data : {
+	// 				value: value,
+	// 				name: "test"
+	// 			},
+	// 			url: "http://localhost:49980/api/values"        
+	// 		}); 
+	// 	    $.ajax({
+	// 			type: "POST",
+	// 			data : {
+	// 				value: value,
+	// 				name: "test"
+	// 			},
+	// 			url: "http://localhost:5000/api/values"        
+    // 		});
+	// 	}
+	// }
+
 	function initToolbarTooltips(){
 		var tooltip = $('#tooltip')[0]
 		$('.tools a').each(function (i, link){
@@ -202,7 +303,6 @@ $(function (){
 			lineNumbers.toggleClass('error', false)
 			var superSampling = window.devicePixelRatio || 1
 			var scale = superSampling * Math.exp(zoomLevel/10)
-
 			var model = nomnoml.draw(canvasElement, currentText(), scale)
 			positionCanvas(canvasElement, superSampling, offset)
 			setFilename(model.config.title)

@@ -20,12 +20,14 @@ nomnoml.parse = function (source){
 		}
 	}))
 	var pureDiagramCode = _.map(_.pluck(lines, 'text'), onlyCompilables).join('\n').trim()
+	
 	var ast = nomnoml.transformParseIntoSyntaxTree(nomnoml.intermediateParse(pureDiagramCode))
 	ast.directives = directives
 	return ast
 }
 
-nomnoml.intermediateParse = function (source){
+nomnoml.intermediateParse = function (source){	
+		
 	return nomnomlCoreParser.parse(source)
 }
 
@@ -33,7 +35,7 @@ nomnoml.transformParseIntoSyntaxTree = function (entity){
 
 	var relationId = 0
 
-	function transformCompartment(parts){
+	function transformCompartment(parts){	
 		var lines = []
 		var rawClassifiers = []
 		var relations = []

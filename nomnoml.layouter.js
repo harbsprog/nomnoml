@@ -16,7 +16,6 @@ nomnoml.Compartment = function (lines, nodes, relations){
 }
 
 nomnoml.layout = function (measurer, config, ast){
-	debugger;
 	function runDagre(input){
 		return dagre.layout()
 					.rankSep(config.spacing)
@@ -34,7 +33,7 @@ nomnoml.layout = function (measurer, config, ast){
 			height: Math.round(measurer.textHeight() * lines.length + 2*config.padding)
 		}
 	}
-	function layoutCompartment(c, compartmentIndex){	
+	function layoutCompartment(c, compartmentIndex){
 		debugger;	
 		var textSize = measureLines(c.lines, compartmentIndex ? 'normal' : 'bold')
 		c.width = textSize.width
@@ -58,6 +57,7 @@ nomnoml.layout = function (measurer, config, ast){
 		var nodes = _.indexBy(c.nodes, 'name')
 		function toPoint(o){ return {x:o.x, y:o.y} }
 		dLayout.eachNode(function(u, value) {
+			value.x += 5;
 			nodes[u].x = value.x
 			nodes[u].y = value.y
 		})
@@ -66,16 +66,17 @@ nomnoml.layout = function (measurer, config, ast){
 			rels[e].path = _.map(_.flatten([start, value.points, end]), toPoint)
 		})
 		var graph = dLayout.graph()
-		var graphHeight = graph.height ? graph.height + 2*config.gutter : 0
-		var graphWidth = graph.width ? graph.width + 2*config.gutter : 0
+		debugger;
+		var graphHeight = graph.height ? graph.height + graph.height*0.1 + 2*config.gutter : 0
+		var graphWidth = graph.width ? graph.width + graph.width*0.1 + 2*config.gutter : 0
 
 		c.width = Math.max(textSize.width, graphWidth) + 2*config.padding
 		c.height = textSize.height + graphHeight + config.padding
 	}
 	function layoutClassifier(clas){
 		_.each(clas.compartments, layoutCompartment)
-		clas.width = _.max(_.pluck(clas.compartments, 'width'))
-		clas.height = skanaar.sum(clas.compartments, 'height')
+		clas.width = _.max(_.pluck(clas.compartments, 'width')) + 10
+		clas.height = skanaar.sum(clas.compartments, 'height') + 10		
 		if (clas.type === 'HIDDEN'){
 			clas.width = 0
 			clas.height = 0

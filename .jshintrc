@@ -1,7 +1,7 @@
 {
   "globals": {
     "confirm": false,
-    "$": false,
+    "$": true,
     "_": false,
     "skanaar": true,
     "dagre": false,
