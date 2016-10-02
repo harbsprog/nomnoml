@@ -53,7 +53,7 @@ $(function (){
 	initToolbarTooltips()
 	$.ajax({
 				type: "GET",				
-				url: "http://localhost:49980/api/values",
+				url: "http://localhost:5000/api/values",
 				success: function(data) {
 					var cc = document.createElement('div');					
 					data.forEach(function(canv){						
@@ -76,7 +76,7 @@ $(function (){
 							{
 								$.ajax({
 									type: "DELETE",				
-									url: "http://localhost:49980/api/values/" + canv._id.$oid,								
+									url: "http://localhost:5000/api/values/" + canv._id.$oid,								
 									success: function(data) {
 										cc.removeChild(c);
 										cc.removeChild(pre);										 
