@@ -1116,6 +1116,7 @@ nomnoml.Compartment = function (lines, nodes, relations){
 }
 
 nomnoml.layout = function (measurer, config, ast){
+	debugger;
 	function runDagre(input){
 		return dagre.layout()
 					.rankSep(config.spacing)
@@ -1133,7 +1134,8 @@ nomnoml.layout = function (measurer, config, ast){
 			height: Math.round(measurer.textHeight() * lines.length + 2*config.padding)
 		}
 	}
-	function layoutCompartment(c, compartmentIndex){
+	function layoutCompartment(c, compartmentIndex){	
+		debugger;	
 		var textSize = measureLines(c.lines, compartmentIndex ? 'normal' : 'bold')
 		c.width = textSize.width
 		c.height = textSize.height
@@ -1219,8 +1221,8 @@ nomnoml.render = function (graphics, config, compartment, setFont){
 	}
 
 	_.extend(styles, config.styles)
-debugger;
-	var visualizers = {		
+
+	var visualizers = {
 		actor : function (node, x, y, padding, config, g) {
 			var a = padding/2
 			var yp = y + a/2
@@ -1357,6 +1359,7 @@ debugger;
 	}
 
 	function renderNode(node, level){
+		debugger;
 		var x = Math.round(node.x-node.width/2)
 		var y = Math.round(node.y-node.height/2)
 		var style = styles[node.type] || styles.CLASS
@@ -1375,8 +1378,8 @@ debugger;
 			var s = i > 0 ? {} : style; // only style node title
 			if (s.empty) return
 			g.save()
-			g.translate(x, yDivider)
-			setFont(config, s.bold ? 'bold' : 'normal', s.italic)
+			g.translate(x, yDivider)			
+			setFont(config, s.bold ? 'bold' : 'normal', s.italic, style.fontSize)
 			renderCompartment(part, s, level+1)
 			g.restore()
 			if (i+1 === node.compartments.length) return
@@ -1426,7 +1429,7 @@ debugger;
 		setFont(config, 'normal')
 		var textW = g.measureText(r.endLabel).width
 		var labelX = config.direction === 'LR' ? -padding-textW : padding
-		if (r.startLabel) g.fillText(r.startLabel, start.x+padding, start.y+padding+fontSize)
+		if (r.startLabel) g.fillText(r.startLabel, start.x+padding, start.y + padding + fontSize)
 		if (r.endLabel)	 g.fillText(r.endLabel, end.x+labelX, end.y-padding)
 
 		if (r.assoc !== '-/-'){
@@ -1514,7 +1517,7 @@ var nomnoml = nomnoml || {};
 (function () {
 	'use strict';
 
-	function getConfig(d) {
+	function getConfig(d) {		
 		var userStyles = {}
 		_.each(d, function (styleDef, key){
 			if (key[0] != '.') return
@@ -1525,11 +1528,12 @@ var nomnoml = nomnoml || {};
 				italic: _.contains(styleDef, 'italic'),
 				dashed: _.contains(styleDef, 'dashed'),
 				empty: _.contains(styleDef, 'empty'),
+				fontSize: _.last(styleDef.match('fontSize=([^ ]*)')),
 				fill: _.last(styleDef.match('fill=([^ ]*)')),
 				visual: _.last(styleDef.match('visual=([^ ]*)')) || 'box'
 			}
-		})
-		return {
+		});		
+		return {			
 			arrowSize: +d.arrowSize || 1,
 			bendSize: +d.bendSize || 0.3,
 			direction: { down: 'TB', right: 'LR' }[d.direction] || 'TB',
@@ -1556,10 +1560,11 @@ var nomnoml = nomnoml || {};
 		canvas.height = rect.height * zoom;
 	}
 
-	function setFont(config, isBold, isItalic, graphics, fontSize) {		
+	function setFont(config, isBold, isItalic, graphics, fontSize) {
 		var style = (isBold === 'bold' ? 'bold' : '')
 		if (isItalic) style = 'italic ' + style
 		var defaultFont = 'Helvetica, sans-serif'
+		debugger;
 		var font = skanaar.format('# #pt #, #', style, (fontSize || config.fontSize), config.font, defaultFont)
 		graphics.font(font)
 	}
@@ -1567,6 +1572,7 @@ var nomnoml = nomnoml || {};
 	function parseAndRender(code, graphics, canvas, scale) {
 		var ast = nomnoml.parse(code);
 		var config = getConfig(ast.directives);
+		debugger;
 		var measurer = {
 			setFont: function (a, b, c, d) { setFont(a, b, c, graphics, d); },
 			textWidth: function (s) { return graphics.measureText(s).width },
@@ -1587,18 +1593,21 @@ var nomnoml = nomnoml || {};
 		var ast = nomnoml.parse(code)
 		var config = getConfig(ast.directives)
 		var skCanvas = skanaar.Svg('')
-		function setFont(config, isBold, isItalic) {
+		function setFont(config, isBold, isItalic, fontSize) {
+			debugger;
 			var style = (isBold === 'bold' ? 'bold' : '')
 			if (isItalic) style = 'italic ' + style
 			var defFont = 'Helvetica, sans-serif'
 			var template = 'font-weight:#; font-size:#pt; font-family:\'#\', #'
-			var font = skanaar.format(template, style, config.fontSize, config.font, defFont)
+			var font = skanaar.format(template, style, (fontSize || config.fontSize), config.font, defFont)
 			skCanvas.font(font)
 		}
+		var test = config.leading * (fontSize || config.fontSize);
+		debugger;
 		var measurer = {
-			setFont: function (a, b, c) { setFont(a, b, c, skCanvas); },
+			setFont: function (a, b, c, d) { setFont(a, b, c, skCanvas, d); },
 			textWidth: function (s) { return skCanvas.measureText(s).width },
-			textHeight: function () { return config.leading * config.fontSize }
+			textHeight: function (fontSize) { return config.leading * (fontSize || config.fontSize) }
 		};
 		var layout = nomnoml.layout(measurer, config, ast)
 		nomnoml.render(skCanvas, config, layout, measurer.setFont)
